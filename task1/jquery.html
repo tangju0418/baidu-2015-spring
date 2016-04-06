@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" content="text/html">
+    <script type="text/javascript" src="jquery-1.12.3.js"></script>
+    <title>jquery</title>
+    <style type="text/css">
+        #div2{
+            background-color: yellow;
+            width: 100px;
+            height: 90px;
+            padding: 5px;
+            margin: 5px;
+            float: left;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<h2>动态创建元素节点</h2>
+<button>点击通过jQuery动态创建元素节点</button>
+<script type="text/javascript">
+    var $body = $("body");
+    $body.on('click',function(){
+        $("<div id='div1'><div id='div2'>动态创建DIV节点</div></div>")
+                .insertAfter($("button"));
+
+    })
+</script>
+</body>
+</html>
