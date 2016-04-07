@@ -1,0 +1,81 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+    <!--<title>task0002</title>-->
+    <!--<style type="text/css">-->
+
+    <!--</style>-->
+    <!---->
+<!--</head>-->
+
+<!--<body>-->
+    <!--<form>-->
+    <!--<input id="number1" type="text">-->
+    <!--<input id="number2" type="text">-->
+    <!--<input id="result">-->
+    <!--<button id="addbtn">结果</button>-->
+    <!--</form>-->
+    <!--<script>-->
+        <!--function $(id){-->
+            <!--return document.getElementById(id);-->
+        <!--}-->
+        <!--function add(num1, num2) {-->
+            <!--return num1 + num2;-->
+        <!--}-->
+        <!--function renderResult(result) {-->
+            <!--$("result").value = result;-->
+        <!--}-->
+        <!--function addEventHandle() {-->
+
+            <!--var num1 = $("number1").value;-->
+            <!--var num2 = $("number2").value;-->
+            <!--var result = add(num1, num2);-->
+            <!--renderResult(result);-->
+
+        <!--}-->
+
+        <!--function initEvent() {-->
+            <!--$("addbtn").addEventListener("click", addEventHandle, false);-->
+        <!--}-->
+
+       <!--initEvent();-->
+    <!--</script>-->
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>挑战题</title>
+        <script type="text/javascript" src="script/jquery-1.12.3.js"></script>
+    </head>
+
+    <body>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li style="display:none">4</li>
+        <li>5</li>
+        <li  style="display:none">6</li>
+        <li>7</li>
+    </ul>
+    <a href="#" class="change">更多</a>
+    <script type="text/javascript">
+            $("a").click(function(){
+
+                if($("a").html()=="更多"){
+
+                    $("li:hidden").show();
+                    $(this).html("简化");
+                }
+                else{
+                    $(this).html("更多");
+                    $("li:eq(3),li:eq(5)").hide();
+                }
+            })
+     </script>
+    </body>
+    </html>
+<!--</body>-->
+<!--</html>-->
