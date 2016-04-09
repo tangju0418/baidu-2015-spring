@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>挑战题</title>
+    <script type="text/javascript" src="script/jquery-1.12.3.js">
+    </script>
+    <style></style>
+</head>
+<body>
+
+<button id="btn">显示信息</button>
+<ul></ul>
+<script>
+    var json = [{"name":"li","age":"18","height":"167"},
+        {"name":"yang","age":"19","height":"177"},
+        {"name":"zhang","age":"21","height":"156"}
+    ];
+    $("#btn").bind("click",function(){
+        $.each(json,function(index,jsn){
+            $("ul").append("<li>姓名："+jsn.name+ "&nbsp;"+"年龄："+jsn.age+ "&nbsp;"+"身高："+jsn.height+"</li>")
+        })
+    })
+</script>
+</body>
+</html>

@@ -4,28 +4,78 @@
     <meta charset="utf-8" content="text/html">
     <script type="text/javascript" src="jquery-1.12.3.js"></script>
     <title>jquery</title>
-    <style type="text/css">
-        #div2{
-            background-color: yellow;
-            width: 100px;
-            height: 90px;
-            padding: 5px;
-            margin: 5px;
-            float: left;
-            border: 1px solid #ccc;
+    <!--<style type="text/css">-->
+        <!--#div2{-->
+            <!--background-color: yellow;-->
+            <!--width: 100px;-->
+            <!--height: 90px;-->
+            <!--padding: 5px;-->
+            <!--margin: 5px;-->
+            <!--float: left;-->
+            <!--border: 1px solid #ccc;-->
+        <!--}-->
+    <!--</style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h2>动态创建元素节点</h2>-->
+<!--<button>点击通过jQuery动态创建元素节点</button>-->
+<!--<script type="text/javascript">-->
+    <!--var $body = $("body");-->
+    <!--$body.on('click',function(){-->
+        <!--$("<div id='div1'><div id='div2'>动态创建DIV节点</div></div>")-->
+                <!--.insertAfter($("button"));-->
+
+    <!--})-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+    <style>
+        span{
+            position:absolute;
+            height:100px;
+            width:100px;
+            background-color:red;
+            left:100px;
+            top:100px;
+        }
+        #right{
+            position:absolute;
+
         }
     </style>
 </head>
-<body>
-<h2>动态创建元素节点</h2>
-<button>点击通过jQuery动态创建元素节点</button>
-<script type="text/javascript">
-    var $body = $("body");
-    $body.on('click',function(){
-        $("<div id='div1'><div id='div2'>动态创建DIV节点</div></div>")
-                .insertAfter($("button"));
 
-    })
+<body>
+<!--<div id="im">-->
+    <!--<input id="left" type="button" value="左移">-->
+    <!--<input id="right" type="button" value="右移">-->
+    <!--<span id="spc"></span>-->
+    <!--<p style="background-color:yellow;width:100px;right:0px;position:absolute;">This is a paragraph.</p>-->
+<!--</div>-->
+<!--<script type="text/javascript">-->
+    <!--$("#right").bind("click",function(){-->
+        <!--$("span").animate({-->
+            <!--left:"+=50px"-->
+        <!--},2000)-->
+    <!--});-->
+    <!--$("#left").bind("click",function(){-->
+        <!--$("#right").animate({-->
+            <!--right:"50%"-->
+        <!--},2000, callback = function (){-->
+            <!--alert("done")-->
+        <!--})-->
+    <!--});-->
+<!--</script>-->
+
+<h3>html()和text()方法设置元素内容</h3>
+<div id="html"></div>
+<div id="text"></div>
+
+<script type="text/javascript">
+    var content = "<b>唉，我又变胖了！</b>";
+    $("#html").html(content);
+    $("#text").text(content);
 </script>
 </body>
 </html>
