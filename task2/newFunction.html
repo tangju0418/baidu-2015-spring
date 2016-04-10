@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>挑战题</title>
+    <script type="text/javascript" src="script/jquery-1.12.3.js">
+    </script>
+    <style></style>
+</head>
+<body>
+<ul>
+    <li>西瓜</li>
+    <li>草莓</li>
+    <li>香蕉</li>
+    <li>梨</li>
+</ul>
+<script>
+    (function ($) {
+        $.extend({
+            "liFocus": function (data) {
+                data.css("background-color","red");
+            },
+            "liBlur":function(data){
+                data.css("background-color","blue");
+            }
+        });
+    })(jQuery);
+    $(function () {
+        $("li").bind("mouseover", function () {
+            $.liFocus($(this));
+        });
+        $("li").bind("mouseout", function () {
+            $.liBlur($(this));
+        });
+    })
+</script>
+</body>
+</html>
