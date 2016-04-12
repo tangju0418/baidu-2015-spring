@@ -51,8 +51,55 @@ var tarObj = cloneObject(srcObj);
 srcObj.a = 2;
 srcObj.b.b1[0] = "Hello";
 
-alert(abObj.a);
-alert(abObj.b.b1[0]);
+//alert(abObj.a);
+//alert(abObj.b.b1[0]);
+//
+//alert(tarObj.a);      // 1
+//alert(tarObj.b.b1[0]);    // "hello"
 
-alert(tarObj.a);      // 1
-alert(tarObj.b.b1[0]);    // "hello"
+function uniqueArray(arr) {
+    var newArray = [];
+    for (var i in arr) {
+        if (arr[i] !== '' && newArray.indexOf(arr[i]) < 0 ) {
+            newArray.push(arr[i]);
+        }
+    }
+    return newArray;
+}
+var a = [1, 3, 5, 7, 5, 3];
+var b = uniqueArray(a);
+//alert(b);
+function simpleTrim(str) {
+    var len = str.length;
+    for (var i = 0; i < len; i++) {
+        if (str[i] === ' ' || str[i] === '\t') {
+        } else {
+            break;
+        }
+    }
+    if (i === len) {
+        return '';
+    }
+    for (var j = len; j > 0; j--) {
+        if (str[j - 1] === ' ' || str[j - 1] === '\t') {
+        } else {
+            break;
+        }
+    }
+
+    return str.substring(i, j);
+}
+var str = '   hi!  ';
+str = simpleTrim(str);
+//alert(str);
+
+function each(arr,fn){
+    for(var i in arr){
+       fn(arr[i],i);
+    }
+}
+var arr = ['java', 'c', 'php', 'html'];
+function output(item, index) {
+   // alert(index + ': ' + item)
+}
+each(arr, output);
