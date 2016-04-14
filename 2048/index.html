@@ -3,55 +3,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>2048</title>
-    <!--<link rel="stylesheet" type="text/css" href="css/2048.css" />-->
-    <script type="text/javascript" src="js/2048.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/2048.css" />
 </head>
 
 <body>
-<div id="div2048">
-    <a id="start"></a>
-</div>
-<script>
-    function a(){
-        var b=[3,0,0,0,2,0,2,0,0,2,2];
-        var len= b.length;
-        for(var j=0;j< len;j++){
-            if(b[j]==0){
-                var m=j;
-                for(var n=m;n<len;n++){
-                    if(b[n]!=0){
-                        b[m]=b[n];
-                        b[n]=0;
-                        break;
-                    }
-                }
-            }
-        }
-        alert(b);
-    }
-    a();
-//    function a(){
-//        var l = [3,0,0,0,2,0,2,0,0,2,2];
-//
-//        var m = -1;
-//        for (var i = 0; i < l.length; ++i){
-//            if (l[i] == 0){
-//                if (-1 == m){
-//                    m = i;
-//                }
-//            }
-//            else{
-//                if (-1 != m){
-//                    l[m] = l[i];
-//                    l[i] = 0;
-//                    m++;
-//                }
-//            }
-//        }
-//
-//        alert(l);
-//    };
-//    a();
-</script>
+    <div id="Game"></div>
+    <script type="text/javascript" src="js/2048.js"></script>
 </body>
 </html>

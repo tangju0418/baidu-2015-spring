@@ -1,90 +1,52 @@
-@charset "utf-8";
-
-#div2048
-{
-    width: 500px;
-    height: 500px;
-    background-color: #b8af9e;
-    margin: 0 auto;
+#game{
+    width: 450px;
+    height: 450px;
+    margin: 50px auto;
     position: relative;
+    background-color: #eeeeee;
 }
-#start
-{
-    width: 500px;
-    height: 500px;
-    line-height: 500px;
-    display: block;
-    text-align: center;
-    font-size: 30px;
-    background: #f2b179;
-    color: #FFFFFF;
-}
-#div2048 div.tile
-{
-    margin: 20px 0px 0px 20px;
+.myGrid{
     width: 100px;
-    height: 40px;
-    padding: 30px 0;
-    font-size: 40px;
-    line-height: 40px;
-    text-align: center;
+    height: 100px;
+    margin: 10px 0 0 10px;
+    position: relative;
     float: left;
+    font-size: 70px;
+    line-height: 100px;
+    text-align: center;
+    color: #ffffff;
+   background-color: #dddddd;
 }
-#div2048 div.tile0{
-     background: #ccc0b2;
- }
-#div2048 div.tile2
-{
-    color: #7c736a;
-    background: #eee4da;
+.v2{
+    background-color: #faf7c8;
 }
-#div2048 div.tile4
-{
-    color: #7c736a;
-    background: #ece0c8;
+.v4{
+    background-color: #ffefa3;
 }
-#div2048 div.tile8
-{
-    color: #fff7eb;
-    background: #f2b179;
+.v8{
+    background-color: #ffd971;
 }
-#div2048 div.tile16
-{
-    color:#fff7eb;
-    background:#f59563;
+.v16{
+    background-color: #fad0c3;
 }
-#div2048 div.tile32
-{
-    color:#fff7eb;
-    background:#f57c5f;
+.v32{
+    background-color: #fa9ccc;
 }
-#div2048 div.tile64
-{
-    color:#fff7eb;
-    background:#f65d3b;
+.v64{
+    background-color: #ed9ffa;
 }
-#div2048 div.tile128
-{
-    color:#fff7eb;
-    background:#edce71;
+.v128{
+    background-color: #e07dfa;
 }
-#div2048 div.tile256
-{
-    color:#fff7eb;
-    background:#edcc61;
+.v256{
+    background-color: #c35ffa;
 }
-#div2048 div.tile512
-{
-    color:#fff7eb;
-    background:#ecc850;
+.v512{
+    background-color: #bc7afa;
 }
-#div2048 div.tile1024
-{
-    color:#fff7eb;
-    background:#edc53f;
+.v1024{
+    background-color: #fab4a8;
 }
-#div2048 div.tile2048
-{
-    color:#fff7eb;
-    background:#eec22e;
+.v2048{
+    background-color: #fa6b80;
 }
