@@ -131,8 +131,10 @@ function leftMove(divs){
     for(var i=0;i<row;i++){
         for(var j=0;j<col-1;j++){
             if(getDivValue(divs[i][j])=== invalidValue){
-                move = true;
-                leftMoveInRow(divs,i,j,j+1);
+
+                if(leftMoveInRow(divs,i,j,j+1)){
+                    move = true;
+                }
                 break;
             }
         }
@@ -147,9 +149,11 @@ function leftMoveInRow(divs, i,j,index){
             setDivValue(divs[i][column], invalidValue);
 
             leftMoveInRow(divs ,i,j+1,column+1);
-            return ;
+            return true;
         }
     }
+
+    return false;
 }
 
 function rowReverse(divs){
