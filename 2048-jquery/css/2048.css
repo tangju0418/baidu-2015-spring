@@ -1,0 +1,153 @@
+#game2048{
+    width: 450px;
+    height: 550px;
+    border: 2px solid  #dddddd;
+    border-radius:15px;
+    margin: 20px auto 0 auto;
+    background-color: #eeeeee;
+}
+
+#information{
+    width: 430px;
+    height: 90px;
+    margin: 10px auto 0;
+    position: relative;
+}
+
+#title {
+    display: block;
+    height: 90px;
+    width: 430px;
+    line-height: 90px;
+    font-size: 70px;
+    text-align: left;
+    text-shadow: 0 1px 1px #fff;
+    position: relative;
+    margin: auto 0;
+    float: left;
+    border-radius:5px;
+    background-color: #cfcfcf;
+}
+
+#gameScore{
+    display: block;
+    height: 30px;
+    width: 160px;
+    line-height: 30px;
+    font-size: 25px;
+    text-align: left;
+    text-shadow: 0 1px 1px #707070;
+    color: #fcfcfc;
+    border: 2px solid #a7a7a7;
+    background-color: #afafaf;
+    position: relative;
+    float: left;
+    margin-left:-180px ;
+    margin-top: 40px;
+    margin-bottom: 0;
+    border-radius:5px;
+}
+
+#main{
+    width: 450px;
+    height: 450px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#end{
+    width: 450px;
+    height: 450px;
+    margin: 0 auto;
+    position: absolute;
+    background-color: #0b0b0b;
+    z-index: 4;
+    filter:alpha(opacity=60);
+    -moz-opacity:0.6;
+    -khtml-opacity: 0.6;
+    opacity: 0.6;
+    display: none;
+}
+
+#end p{
+    display: block;
+    height: 100px;
+    width: 450px;
+    font-size: 80px;
+    text-align: center;
+    color: rgb(250, 3, 15);
+}
+#again{
+    width: 120px;
+    height: 60px;
+    font-size: 25px;
+    color: #0b0b0b;
+}
+#again{
+    margin-left: 175px;
+}
+
+#game{
+    width: 450px;
+    height: 450px;
+    margin: 0 auto;
+    position: absolute;
+    z-index: 1;
+}
+.myGrid{
+    position: absolute;
+    line-height: 100px;
+    text-align: center;
+    color: #767676;
+    background-color: #dddddd;
+    border-radius : 5px;
+    z-index: 2;
+}
+.v2{
+    font-size: 70px;
+    background-color: #faf7c8;
+}
+.v4{
+    font-size: 70px;
+    background-color: #fff4b3;
+}
+.v8{
+    font-size: 70px;
+    background-color: #ffefa3;
+}
+.v16{
+    font-size: 70px;
+    background-color: #ffe85e;
+}
+.v32{
+    font-size: 70px;
+    background-color: #ffd971;
+}
+.v64{
+    font-size: 70px;
+    background-color: #ed9ffa;
+}
+.v128{
+    font-size:50px;
+    background-color: #e07dfa;
+}
+.v256{
+    font-size:50px;
+    background-color: #c35ffa;
+}
+.v512{
+    font-size:50px;
+    background-color: #bc7afa;
+}
+.v1024{
+    font-size:40px;
+    background-color: #fab4a8;
+}
+.v2048{
+    font-size:40px;
+    background-color: #fa6b80;
+}
+.v4096{
+    font-size:40px;
+    background-color: #fa585e;
+}
