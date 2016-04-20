@@ -2,7 +2,9 @@
 
     var gameExcel = [];
     var emptyDivs = [];
-    var $scores = $("#score").html();
+    var fillDivs = [];
+    var scores = $("#score").html();
+
     const row = 4;
     const col = 4;
     const invalidValue = "";
@@ -10,10 +12,9 @@
     var box_height = 100;
     var box_space = 10;
 
-
-
-    //$(document).ready(initGridItems);
+    $(document).ready(initGridItems);
     $(document).ready(initGame);
+
 
     function mapExcel(arr,func,val){
         for(var i=0;i < row;i++) {
@@ -24,10 +25,9 @@
     }
     function initGame(){
         emptyDivs = [];
-        $scores = 0;
-        $("#score").html($scores);
-        $("#end").css("display","none");
-        initGridItems();
+        scores = 0;
+        $("#score").html(scores);
+        $("#end").hide();
 
         refreshEmptyDivs(emptyDivs);
         fillOneDivItem(emptyDivs);
@@ -41,10 +41,10 @@
             var arr=[];
             for (var j = 0; j < col; j++) {
                 var m = i*4 + j;
-                //arr.push(0);
+                var fill = [];
                 var $box = $("<div></div>").addClass("myGrid").attr({
                     'id':makeElemId(m),
-                    'value': invalidValue,
+                    'value': invalidValue
                 }).css({
                     'z-index' :2,
                     'width' : box_width+'px',
@@ -55,8 +55,10 @@
                 });
                 $box.appendTo($("#Game"));
                 arr.push($box);
+                fill.push(invalidValue);
             }
             gameExcel.push(arr);
+            fillDivs.push(fill);
         }
     }
 
@@ -68,14 +70,13 @@
         return "myGrid"+" v"+i;
     }
 
-    function setDivValue(boxId, value){
-        var idNumber = parseInt(boxId.replace("Grid",""));
+    function setDivValue(idNumber, value){
         var i = Math.floor(idNumber / 4);
         var j = idNumber % 4;
         $(gameExcel[i][j]).attr("value",value);
 
-        var $box = $("<div></div>").addClass(makeClassName(value)).attr({
-            'value': value
+        var $box = $("<div></div>").addClass(makeClassName(value)).html(value).attr({
+            'value' : value
         }).css({
             'z-index' :3,
             'width' : '0px',
@@ -89,7 +90,8 @@
             'left': (j * (box_width + box_space) + box_space) + 'px',
             'top': (i * (box_height + box_space) + box_space) + 'px'
         },100);
-        $box.html(value).appendTo($("#Game"));
+        $box.appendTo($("#Game"));
+        fillDivs[i][j] = $box;
     }
 
     function refreshEmptyDivs(empty_divs){
@@ -106,220 +108,283 @@
     function fillOneDivItem(empty_divs){
         var nNumber =Math.round(Math.random()*(empty_divs.length-1));
         var num=(Math.random()<0.8 ? 2 : 4);
-        var boxId = $(empty_divs[nNumber]).attr("id").toString();
+        var boxId = $(empty_divs[nNumber]).attr("id");
+        var idNumber = parseInt(boxId.replace("Grid",""));
+        setDivValue(idNumber,num);
+    }
 
-        setDivValue(boxId,num);
+    function leftMove(divs){
+        var move = false;
+        for(var i=0;i<row;i++){
+            var m = 0;
+            for(var j=0;j<col;j++){
+                if($(divs[i][j]).attr("value")=== invalidValue){
+                    m++;
+                }
+                else {
+                    if(m!=0) {
+                        move = true;
+                        var left = (j - m) * (box_width + box_space) + box_space;
+                        $(fillDivs[i][j]).animate({
+                            'left': left + 'px'
+                        }, 200);
+                        fillDivs[i][j - m] = fillDivs[i][j];
+                        $(divs[i][j - m]).attr("value", ($(fillDivs[i][j]).attr("value")));
+                        fillDivs[i][j] = invalidValue;
+                        $(divs[i][j]).attr("value", invalidValue);
+                    }
+                }
+            }
+        }
+        return move;
+    }
+    function rightMove(divs){
+        var move = false;
+        for(var i=0;i<row;i++){
+            var m = 0;
+            for(var j=col-1;j>-1;j--){
+                if($(divs[i][j]).attr("value")=== invalidValue){
+                    m++;
+                }
+                else{
+                    if(m!=0) {
+                        move = true;
+                        var left = (j + m) * (box_width + box_space) + box_space;
+                        $(fillDivs[i][j]).animate({
+                            'left': left + 'px'
+                        }, 200);
+                        fillDivs[i][j + m] = fillDivs[i][j];
+                        $(divs[i][j + m]).attr("value", $(fillDivs[i][j]).attr("value"));
+                        fillDivs[i][j] = invalidValue;
+                        $(divs[i][j]).attr("value", invalidValue);
+                    }
+                }
+            }
+        }
+        return move;
+    }
+    function upMove(divs){
+        var move = false;
+        for(var j=0;j<col;j++){
+            var m = 0;
+            for(var i=0;i<row;i++){
+                if($(divs[i][j]).attr("value")=== invalidValue){
+                    m++;
+                }
+                else{
+                    if(m!=0) {
+                        move = true;
+                        var top = (i - m) * (box_width + box_space) + box_space;
+                        $(fillDivs[i][j]).animate({
+                            'top': top + 'px'
+                        }, 200);
+                        fillDivs[i - m][j] = fillDivs[i][j];
+                        $(divs[i - m][j]).attr("value", $(fillDivs[i][j]).attr("value"));
+                        fillDivs[i][j] = invalidValue;
+                        $(divs[i][j]).attr("value", invalidValue);
+                    }
+                }
+            }
+        }
+        return move;
+    }
+    function downMove(divs){
+        var move = false;
+        for(var j=0;j<col;j++){
+            var m = 0;
+            for(var i=row-1;i>-1;i--){
+                if($(divs[i][j]).attr("value")=== invalidValue){
+                    m++;
+                }
+                else{
+                    if(m!=0) {
+                        move = true;
+                        var top = (i + m) * (box_width + box_space) + box_space;
+                        $(fillDivs[i][j]).animate({
+                            'top': top + 'px'
+                        }, 200);
+                        fillDivs[i + m][j] = fillDivs[i][j];
+                        $(divs[i + m][j]).attr("value", $(fillDivs[i][j]).attr("value"));
+                        fillDivs[i][j] = invalidValue;
+                        $(divs[i][j]).attr("value", invalidValue);
+                    }
+                }
+            }
+        }
+        return move;
+    }
+
+    function changeDivValue(div,i1,j1,i2,j2){
+        var val = 2*parseInt($(div[i1][j1]).attr("value"));
+        $(fillDivs[i1][j1]).html(val);
+        $(fillDivs[i1][j1]).attr("value",val);
+        $(div[i1][j1]).attr("value",val);
+        $(div[i2][j2]).attr("value",invalidValue);
+        $(fillDivs[i2][j2]).remove();
+        fillDivs[i2][j2] = invalidValue;
+        scores += parseInt(val);
+        $("#score").html(scores);
     }
 
 
-//    function leftMoveSum(divs) {
-//        var add = false;
-//        for (var i = 0; i < row; i++) {
-//            for (var j = 0; j < col-1; j++) {
-//                if (gameExcel[i][j].innerHTML != invalidValue && gameExcel[i][j].innerHTML == gameExcel[i][j+1].innerHTML) {
-//                    setDivValue(gameExcel[i][j], 2 * gameExcel[i][j].innerHTML);
-//                    setDivValue(gameExcel[i][j+1], invalidValue);
-//
-//                    add = true;
-//                    $scores += parseInt(getDivValue(gameExcel[i][j]));
-//                    $("#score").html($scores);
-//
-//                    if((j+1)==1 && gameExcel[i][j+2].innerHTML != invalidValue && gameExcel[i][j+2].innerHTML == gameExcel[i][j+3].innerHTML){
-//                        setDivValue(gameExcel[i][j+2], 2 * gameExcel[i][j+2].innerHTML);
-//                        setDivValue(gameExcel[i][j+3], invalidValue);
-//
-//                        add = true;
-//                        $scores += parseInt(getDivValue(gameExcel[i][j+2]));
-//                        $("#score").html($scores);
-//                    }
-//                }
-//            }
-//        }
-//        return add;
-//    }
-//
-//    function leftMove(divs){
-//        var move = false;
-//        for(var i=0;i<row;i++){
-//            for(var j=0;j<col-1;j++){
-//                if(getDivValue(divs[i][j])=== invalidValue){
-//
-//                    if(leftMoveInRow(divs,i,j,j+1)){
-//                        move = true;
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//        return move;
-//    }
-//
-//    function leftMoveInRow(divs, i,j,index){
-//        for (var column = index; column < divs[i].length; ++column){
-//            if (getDivValue(divs[i][column])!= invalidValue){
-//                setDivValue(divs[i][j], divs[i][column].innerHTML);
-//                setDivValue(divs[i][column], invalidValue);
-//
-//                leftMoveInRow(divs ,i,j+1,column+1);
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-//
-//    function rowReverse(divs){
-//        for (var i=0;i<row;i++){
-//            divs[i].reverse();
-//        }
-//        return divs;
-//    }
-//
-//    function upMoveSum(divs) {
-//        var add = false;
-//        for (var j = 0; j < col; j++) {
-//            for (var i = 0; i < row-1; i++) {
-//                if (gameExcel[i][j].innerHTML != invalidValue && gameExcel[i][j].innerHTML == gameExcel[i + 1][j].innerHTML) {
-//                    setDivValue(gameExcel[i][j], 2 * gameExcel[i][j].innerHTML);
-//                    setDivValue(gameExcel[i + 1][j], invalidValue);
-//
-//                    add = true;
-//                    $scores += parseInt(getDivValue(gameExcel[i][j]));
-//                    $("#score").html($scores);
-//
-//                    if ((i + 1) == 1 && gameExcel[i + 2][j].innerHTML != invalidValue && gameExcel[i + 2][j].innerHTML == gameExcel[i + 3][j].innerHTML) {
-//                        setDivValue(gameExcel[i + 2][j], 2 * gameExcel[i + 2][j].innerHTML);
-//                        setDivValue(gameExcel[i+3][j], invalidValue);
-//
-//                        add = true;
-//                        $scores += parseInt(getDivValue(gameExcel[i+2][j]));
-//                        $("#score").html($scores);
-//                    }
-//                }
-//            }
-//        }
-//        return add;
-//    }
-//
-//    function upMove(divs){
-//        var move = false;
-//        for(var j=0;j<col;j++){
-//            var m = -1;
-//            for (var i = 0; i <row; ++i){
-//                if (invalidValue === getDivValue(divs[i][j])){
-//                    if (-1 == m){
-//                        m = i;
-//                    }
-//                }
-//                else{
-//                    if (-1 != m){
-//                        setDivValue(divs[m][j], getDivValue(divs[i][j]));
-//                        setDivValue(divs[i][j],invalidValue);
-//                        m++;
-//                        move = true;
-//                    }
-//                }
-//            }
-//        }
-//        return move;
-//    }
-//
-//    function colReverse(divs){
-//        for (var j=0;j<col;j++){
-//            for(var i=0;i<row/2;i++){
-//                var arr = divs[i][j];
-//                divs[i][j] = divs[3-i][j];
-//                divs[3-i][j] = arr;
-//            }
-//        }
-//        return divs;
-//    }
-//
-//    function gameJudgment(condition1,condition2){
-//        if(condition1 || condition2){
-//            refreshEmptyDivs(emptyDivs);
-//            fillOneDivItem(emptyDivs);
-//        }
-//        else {
-//            refreshEmptyDivs(emptyDivs);
-//            if (emptyDivs.length < 1) {
-//                gameOver();
-//            }
-//        }
-//    }
-//
-//    function process_left_key_down(){
-//        var moveLeft = leftMove(gameExcel);
-//        var addLeft = leftMoveSum(gameExcel);
-//        leftMove(gameExcel);
-//        gameJudgment(moveLeft,addLeft);
-//    }
-//
-//    function process_up_key_down(){
-//        var moveUp = upMove(gameExcel);
-//        var addUp = upMoveSum(gameExcel);
-//        upMove(gameExcel);
-//        gameJudgment(moveUp,addUp);
-//    }
-//
-//    function process_right_key_down(){
-//        rowReverse(gameExcel);
-//        var moveRight =leftMove(gameExcel);
-//        var addRight =leftMoveSum(gameExcel);
-//        leftMove(gameExcel);
-//        rowReverse(gameExcel);
-//        gameJudgment(moveRight,addRight);
-//    }
-//
-//    function process_down_key_down(){
-//        colReverse(gameExcel);
-//        var moveDown = upMove(gameExcel);
-//        var addDown = upMoveSum(gameExcel);
-//        upMove(gameExcel);
-//        colReverse(gameExcel);
-//        gameJudgment(moveDown,addDown);
-//    }
-//
-//    document.onkeydown=function(e) {
-//        e = window.event || e;
-//
-//        var func_mapper = [
-//            {
-//                key_code: 37,
-//                func: process_left_key_down
-//            },
-//            {
-//                key_code: 38,
-//                func: process_up_key_down
-//            },
-//            {
-//                key_code: 39,
-//                func: process_right_key_down
-//            },
-//            {
-//                key_code: 40,
-//                func: process_down_key_down
-//            }
-//        ];
-//
-//        for (var i = 0; i < func_mapper.length; i++) {
-//            if (func_mapper[i].key_code === e.keyCode) {
-//                func_mapper[i].func();
-//                break;
-//            }
-//        }
-//    }
-//
-//    function gameOver() {
-//        var endPage = document.getElementById("end");
-//        endPage.style.display="inline";
-//        var gameAgain = document.getElementById("again");
-//
-//        gameAgain.onclick = function(){
-//            initGame();
-//        };
-//    }
-//
+    function leftMoveSum(divs) {
+        var add = false;
+        for (var i = 0; i < row; i++) {
+            for (var j = 0; j < col-1; j++) {
+                if ($(divs[i][j]).attr("value") != invalidValue && $(divs[i][j]).attr("value") === $(divs[i][j+1]).attr("value")) {
+                    changeDivValue(divs, i,j,i,j+1);
+                    add = true;
+
+                    if((j+1)===1 && $(divs[i][j+2]).attr("value") != invalidValue && $(divs[i][j+2]).attr("value") === $(divs[i][j+3]).attr("value")){
+                        changeDivValue(divs,i,j+2,i,j+3);
+                        add = true;
+                    }
+                }
+            }
+        }
+        return add;
+    }
+    function rightMoveSum(divs) {
+        var add = false;
+        for (var i = 0; i < row; i++) {
+            for (var j = col-1; j > 0; j--) {
+                if ($(divs[i][j]).attr("value") != invalidValue && $(divs[i][j]).attr("value") === $(divs[i][j-1]).attr("value")) {
+                    changeDivValue(divs, i,j,i,j-1);
+                    add = true;
+
+                    if((j-1)===2 && $(divs[i][j-2]).attr("value") != invalidValue && $(divs[i][j-2]).attr("value") === $(divs[i][j-3]).attr("value")){
+                        changeDivValue(divs,i,j-2,i,j-3);
+                        add = true;
+                    }
+                }
+            }
+        }
+        return add;
+    }
+
+    function upMoveSum(divs) {
+        var add = false;
+        for (var j = 0; j < col; j++) {
+            for (var i = 0; i < row-1; i++) {
+
+                if ($(divs[i][j]).attr("value") != invalidValue && $(divs[i][j]).attr("value") === $(divs[i+1][j]).attr("value")) {
+                    changeDivValue(divs, i,j,i+1,j);
+                    add = true;
+
+                    if ((i + 1) === 1 && $(divs[i+2][j]).attr("value") != invalidValue && $(divs[i+2][j]).attr("value") === $(divs[i+3][j]).attr("value")) {
+                        changeDivValue(divs,i+2,j,i+3,j);
+                        add = true;
+                    }
+                }
+            }
+        }
+        return add;
+    }
+    function downMoveSum(divs) {
+        var add = false;
+        for (var j = 0; j < col; j++) {
+            for (var i = row-1; i > 0; i--) {
+
+                if ($(divs[i][j]).attr("value") != invalidValue && $(divs[i][j]).attr("value") === $(divs[i-1][j]).attr("value")) {
+                    changeDivValue(divs, i,j,i-1,j);
+                    add = true;
+
+                    if ((i - 1) === 2 && $(divs[i-2][j]).attr("value") != invalidValue && $(divs[i-2][j]).attr("value") === $(divs[i-3][j]).attr("value")) {
+                        changeDivValue(divs,i-2,j,i-3,j);
+                        add = true;
+                    }
+                }
+            }
+        }
+        return add;
+    }
+
+    function gameJudgment(condition1,condition2){
+        if(condition1 || condition2){
+            refreshEmptyDivs(emptyDivs);
+            var judgment = setTimeout(function(){ fillOneDivItem(emptyDivs);},200);
+        }
+        else {
+            refreshEmptyDivs(emptyDivs);
+            if (emptyDivs.length < 1) {
+                gameOver();
+            }
+        }
+    }
+
+    function process_left_key_down(){
+        var moveLeft = leftMove(gameExcel);
+        var addLeft = leftMoveSum(gameExcel);
+        leftMove(gameExcel);
+        gameJudgment(moveLeft,addLeft);
+    }
+
+    function process_up_key_down(){
+        var moveUp = upMove(gameExcel);
+        var addUp = upMoveSum(gameExcel);
+        upMove(gameExcel);
+        gameJudgment(moveUp,addUp);
+    }
+
+    function process_right_key_down(){
+
+        var moveRight =rightMove(gameExcel);
+        var addRight =rightMoveSum(gameExcel);
+        rightMove(gameExcel);
+        gameJudgment(moveRight,addRight);
+    }
+
+    function process_down_key_down(){
+        var moveDown = downMove(gameExcel);
+        var addDown = upMoveSum(gameExcel);
+        downMove(gameExcel);
+        gameJudgment(moveDown,addDown);
+    }
+
+    document.onkeydown=function(e) {
+        e = window.event || e;
+
+        var func_mapper = [
+            {
+                key_code: 37,
+                func: process_left_key_down
+            },
+            {
+                key_code: 38,
+                func: process_up_key_down
+            },
+            {
+                key_code: 39,
+                func: process_right_key_down
+            },
+            {
+                key_code: 40,
+                func: process_down_key_down
+            }
+        ];
+
+        for (var i = 0; i < func_mapper.length; i++) {
+            if (func_mapper[i].key_code === e.keyCode) {
+                func_mapper[i].func();
+                break;
+            }
+        }
+    };
+
+    function gameOver() {
+        $("#end").show();
+        var $gameAgain = $("#again");
+
+        $gameAgain.bind('click',function(){
+            for (var i = 0; i < row; i++) {
+                for (var j = 0; j < col; j++) {
+                    fillDivs[i][j].remove();
+                    fillDivs[i][j] = invalidValue;
+                    $(gameExcel[i][j]).attr("value",invalidValue)
+                }
+            }
+            initGame();
+        });
+    }
+
 })();
-
-
