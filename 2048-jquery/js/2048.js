@@ -1,6 +1,5 @@
 (function(){
 
-    var gameExcel = [];
     var emptyDivs = [];
     var fillDivs = [];
     var scores = $("#score").html();
@@ -14,7 +13,6 @@
 
     $(document).ready(initGridItems);
     $(document).ready(initGame);
-
 
     function mapExcel(arr,func,val){
         for(var i=0;i < row;i++) {
@@ -38,14 +36,9 @@
     function initGridItems() {
 
         for (var i = 0; i < row; i++) {
-            var arr=[];
             var fill = [];
             for (var j = 0; j < col; j++) {
-                var m = i*4 + j;
-                var $box = $("<div></div>").addClass("myGrid").attr({
-                    'id':makeElemId(m),
-                    'value': invalidValue
-                }).css({
+                var $box = $("<div></div>").addClass("myGrid").css({
                     'z-index' :2,
                     'width' : box_width+'px',
                     'height' : box_height+'px',
@@ -54,16 +47,10 @@
                     'line-height' : box_height+'px'
                 });
                 $box.appendTo($("#Game"));
-                arr.push($box);
                 fill.push(invalidValue);
             }
-            gameExcel.push(arr);
             fillDivs.push(fill);
         }
-    }
-
-    function makeElemId(i){
-        return "Grid" + i;
     }
 
     function makeClassName(i){
@@ -73,9 +60,8 @@
     function setDivValue(idNumber, value){
         var i = Math.floor(idNumber / 4);
         var j = idNumber % 4;
-        $(gameExcel[i][j]).attr("value",value);
 
-        var $box = $("<div></div>").addClass(makeClassName(value)).html(value).attr({
+        var $box = $("<div></div>").addClass(makeClassName(value)).attr({
             'value' : value
         }).css({
             'z-index' :3,
@@ -84,61 +70,73 @@
             'left' : (j*(box_width+box_space)+box_space+box_width/2)+'px',
             'top' : (i*(box_height+box_space)+box_space+box_height/2)+'px',
             'line-height' : box_height+'px'
-        }).animate({
+        }).appendTo($("#Game"));
+
+        fillDivs[i][j] = $box;
+
+        $box.delay(150).animate({
             'width': box_width + 'px',
             'height': box_height + 'px',
             'left': (j * (box_width + box_space) + box_space) + 'px',
             'top': (i * (box_height + box_space) + box_space) + 'px'
-        },100);
-        $box.appendTo($("#Game"));
-        fillDivs[i][j] = $box;
+        },100,jQuery.linear ,function(){
+            $box.html(value)
+        })
     }
 
     function refreshEmptyDivs(empty_divs){
-
         empty_divs.length = 0;
-        mapExcel(gameExcel,function(arr,val){
-            if(val === $(arr).attr("value")){
-                empty_divs.push(arr);
+        for(var i=0;i < row;i++) {
+            for(var j = 0; j < col; j++){
+                if(fillDivs[i][j]===invalidValue){
+                    empty_divs.push(i*4+j);
+                }
             }
-        },invalidValue);
+        }
         return empty_divs;
     }
 
     function fillOneDivItem(empty_divs){
         var nNumber =Math.round(Math.random()*(empty_divs.length-1));
         var num=(Math.random()<0.8 ? 2 : 4);
-        var boxId = $(empty_divs[nNumber]).attr("id");
-        var idNumber = parseInt(boxId.replace("Grid",""));
+        var idNumber = empty_divs[nNumber];
         setDivValue(idNumber,num);
     }
 
-    function leftMoving(divs,i1,j1,i2,j2,value){
+    function Moving(divs,i1,j1,i2,j2,value){
         var left = j1 * (box_width + box_space) + box_space;
-        $(fillDivs[i2][j2]).animate({
-            'left': left + 'px'
-            }, 150,function(){
-                fillDivs[i1][j1] = fillDivs[i2][j2];
-                $(divs[i1][j1]).attr("value", value);
-                fillDivs[i2][j2] = invalidValue;
-                $(divs[i2][j2]).attr("value", invalidValue);
-            }
-        );
-    }
-    function leftAddMoving(divs,i1,j1,i2,j2,value){
-        var left = j1 * (box_width + box_space) + box_space;
-        $(fillDivs[i2][j2]).animate({
-                'left': left + 'px'
-            }, 150,function(){
-                $(fillDivs[i2][j2]).html(value);
-                $(fillDivs[i2][j2]).attr("value",value);
-                $(fillDivs[i2][j2]).removeClass().addClass(makeClassName(value));
-                $(fillDivs[i1][j1]).remove();
+        var top = i1 * (box_height + box_space) + box_space;
 
-                fillDivs[i1][j1] = fillDivs[i2][j2];
-                $(divs[i1][j1]).attr("value", value);
-                fillDivs[i2][j2] = invalidValue;
-                $(divs[i2][j2]).attr("value", invalidValue);
+        var $obj_2 =  $(divs[i2][j2]);
+        divs[i1][j1] = divs[i2][j2];
+        divs[i2][j2] = invalidValue;
+
+        $obj_2.animate({
+            'left': left + 'px',
+            'top':top +'px'
+            }, 150);
+    }
+
+    function AddMoving(divs,i1,j1,i2,j2,value){
+        var left = j1 * (box_width + box_space) + box_space;
+        var top = i1 * (box_height + box_space) + box_space;
+
+        var $obj_1 =  $(divs[i1][j1]);
+        var $obj_2 =  $(divs[i2][j2]);
+        $obj_2.attr("value",value);
+        divs[i1][j1] = divs[i2][j2];
+        divs[i2][j2] = invalidValue;
+
+        scores+=parseInt(value);
+        $("#score").html(scores);
+
+        $obj_2.animate({
+                'left': left + 'px',
+                'top': top + 'px'
+            }, 150,jQuery.linear ,function(){
+            $obj_2.html(value);
+            $obj_2.removeClass().addClass(makeClassName(value));
+            $obj_1.remove();
             }
         );
     }
@@ -146,30 +144,30 @@
     function leftMove(divs){
         var move = false;
         var add = false;
+
         for(var i=0;i<row;i++){
             var m = 0;
             var n = 0;
             var box = [];
             for(var j=0;j<col;j++){
-                if($(divs[i][j]).attr("value")=== invalidValue){
+                if(divs[i][j]=== invalidValue){
                     m++;
                 }
                 else {
-                    box.push(fillDivs[i][j]);
+                    box.push(divs[i][j]);
                     var len = box.length;
-                    var value = $(fillDivs[i][j]).attr("value");
+                    var value = $(divs[i][j]).attr("value");
                     if(len>1 && $(box[len-1]).attr("value") === $(box[len-2]).attr("value")){
                         n++;
-                        add = true;
-                        leftAddMoving(divs,i,j-m-n,i,j,2*value);
                         box = [];
+                        add = true;
+                        AddMoving(divs,i,j-m-n,i,j,2*value);
                     }
                     else {
                         if(m!=0 || n!=0){
                             move = true;
-                            leftMoving(divs,i,j-m-n,i,j,value);
+                            Moving(divs,i,j-m-n,i,j,value);
                         }
-
                     }
                 }
             }
@@ -184,23 +182,23 @@
             var n = 0;
             var box = [];
             for(var j=col-1;j>-1;j--){
-                if($(divs[i][j]).attr("value")=== invalidValue){
+                if(divs[i][j]=== invalidValue){
                     m++;
                 }
                 else {
-                    box.push(fillDivs[i][j]);
+                    box.push(divs[i][j]);
                     var len = box.length;
-                    var value = $(fillDivs[i][j]).attr("value");
+                    var value = $(divs[i][j]).attr("value");
                     if(len>1 && $(box[len-1]).attr("value") === $(box[len-2]).attr("value")){
                         n++;
-                        add = true;
-                        leftAddMoving(divs,i,j+m+n,i,j,2*value);
                         box = [];
+                        add = true;
+                        AddMoving(divs,i,j+m+n,i,j,2*value);
                     }
                     else {
                         if(m!=0 || n!=0){
                             move = true;
-                            leftMoving(divs,i,j+m+n,i,j,value);
+                            Moving(divs,i,j+m+n,i,j,value);
                         }
 
                     }
@@ -208,37 +206,6 @@
             }
         }
         return (move || add);
-    }
-    function upMoving(divs,i1,j1,i2,j2,value){
-        var up = i1 * (box_height + box_space) + box_space;
-        $(fillDivs[i2][j2]).animate({
-                'top': up + 'px'
-            }, 150,function(){
-                fillDivs[i1][j1] = fillDivs[i2][j2];
-                $(divs[i1][j1]).attr("value", value);
-                fillDivs[i2][j2] = invalidValue;
-                $(divs[i2][j2]).attr("value", invalidValue);
-
-            }
-        );
-    }
-    function upAddMoving(divs,i1,j1,i2,j2,value){
-        var up = i1 * (box_height + box_space) + box_space;
-        $(fillDivs[i2][j2]).animate({
-                'top': up + 'px'
-            }, 150,function(){
-                $(fillDivs[i2][j2]).html(value);
-                $(fillDivs[i2][j2]).attr("value",value);
-                $(fillDivs[i2][j2]).removeClass().addClass(makeClassName(value));
-                $(fillDivs[i1][j1]).remove();
-
-                fillDivs[i1][j1] = fillDivs[i2][j2];
-                $(divs[i1][j1]).attr("value", value);
-                fillDivs[i2][j2] = invalidValue;
-                $(divs[i2][j2]).attr("value", invalidValue);
-
-            }
-        );
     }
 
     function upMove(divs){
@@ -249,25 +216,24 @@
             var n = 0;
             var box = [];
             for(var i=0;i<row;i++){
-                if($(divs[i][j]).attr("value")=== invalidValue){
+                if(divs[i][j]=== invalidValue){
                     m++;
                 }
                 else {
-                    box.push(fillDivs[i][j]);
+                    box.push(divs[i][j]);
                     var len = box.length;
-                    var value = $(fillDivs[i][j]).attr("value");
+                    var value = $(divs[i][j]).attr("value");
                     if(len>1 && $(box[len-1]).attr("value") === $(box[len-2]).attr("value")){
                         n++;
-                        add = true;
-                        upAddMoving(divs,i-m-n,j,i,j,2*value);
                         box = [];
+                        add = true;
+                        AddMoving(divs,i-m-n,j,i,j,2*value);
                     }
                     else {
                         if(m!=0 || n!=0){
                             move = true;
-                            upMoving(divs,i-m-n,j,i,j,value);
+                            Moving(divs,i-m-n,j,i,j,value);
                         }
-
                     }
                 }
             }
@@ -282,25 +248,24 @@
             var n = 0;
             var box = [];
             for(var i=row-1;i>-1;i--){
-                if($(divs[i][j]).attr("value")=== invalidValue){
+                if(divs[i][j]=== invalidValue){
                     m++;
                 }
                 else {
-                    box.push(fillDivs[i][j]);
+                    box.push(divs[i][j]);
                     var len = box.length;
-                    var value = $(fillDivs[i][j]).attr("value");
+                    var value = $(divs[i][j]).attr("value");
                     if(len>1 && $(box[len-1]).attr("value") === $(box[len-2]).attr("value")){
                         n++;
-                        add = true;
-                        upAddMoving(divs,i+m+n,j,i,j,2*value);
                         box = [];
+                        add = true;
+                        AddMoving(divs,i+m+n,j,i,j,2*value);
                     }
                     else {
                         if(m!=0 || n!=0){
                             move = true;
-                            upMoving(divs,i+m+n,j,i,j,value);
+                            Moving(divs,i+m+n,j,i,j,value);
                         }
-
                     }
                 }
             }
@@ -308,15 +273,9 @@
         return (move || add);
     }
 
-
-
     function gameJudgment(condition){
-        $("#Game").animate({
-            'opacity':1
-        },150,function(){
             refreshEmptyDivs(emptyDivs);
             if(condition){
-
                 fillOneDivItem(emptyDivs);
             }
             else {
@@ -324,29 +283,34 @@
                     gameOver();
                 }
             }
-        });
     }
 
     function process_left_key_down(){
-        var moveLeft = leftMove(gameExcel);
-
-        gameJudgment(moveLeft);
+        if($("#end").is(":hidden")){
+            var moveLeft = leftMove(fillDivs);
+            gameJudgment(moveLeft);
+        }
     }
 
     function process_up_key_down(){
-        var moveUp = upMove(gameExcel);
-        gameJudgment(moveUp);
+        if($("#end").is(":hidden")) {
+            var moveUp = upMove(fillDivs);
+            gameJudgment(moveUp);
+        }
     }
 
     function process_right_key_down(){
-
-        var moveRight =rightMove(gameExcel);
-        gameJudgment(moveRight);
+        if($("#end").is(":hidden")) {
+            var moveRight = rightMove(fillDivs);
+            gameJudgment(moveRight);
+        }
     }
 
     function process_down_key_down(){
-        var moveDown = downMove(gameExcel);
-        gameJudgment(moveDown);
+        if($("#end").is(":hidden")) {
+            var moveDown = downMove(fillDivs);
+            gameJudgment(moveDown);
+        }
     }
 
     document.onkeydown=function(e) {
@@ -388,7 +352,6 @@
                 for (var j = 0; j < col; j++) {
                     fillDivs[i][j].remove();
                     fillDivs[i][j] = invalidValue;
-                    $(gameExcel[i][j]).attr("value",invalidValue)
                 }
             }
             initGame();
