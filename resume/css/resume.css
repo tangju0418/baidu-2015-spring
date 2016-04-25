@@ -1,0 +1,85 @@
+body,p,h2{ padding:0; margin:0; }
+#resume{
+    width:820px;
+    margin:0 auto;
+    background: url(../images/middleBottom.jpg)repeat-y;
+    font-size: 18px;
+}
+#resumeTop{
+    width: 820px;
+    background: url(../images/head.jpg)no-repeat;
+}
+#resumeBottom{
+    width: 820px;
+    background: url(../images/middleBottom.jpg)no-repeat -820px bottom;
+}
+#left{
+    width: 154px;
+    height: 956px;
+    padding-top: 236px;
+    float: left;
+}
+#left p {
+    width: 80px;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    border-bottom: 2px solid #67b509;
+    box-shadow: 0 2px 0 #71ba09;
+}
+.personal{
+    padding-top: 66px;
+}
+.job{
+    padding-top:60px ;
+}
+.skill{
+    padding-top:36px ;
+}
+.work{
+    padding-top:130px ;
+}
+.project{
+    padding-top:230px ;
+}
+.education{
+    padding-top:140px ;
+}
+.evaluation{
+    padding-top:34px ;
+}
+span{
+    font-weight:bold;
+}
+
+#right{
+    width: 666px;
+    padding-top: 236px;
+    padding-left: 200px;
+}
+
+#right div{
+    width: 620px;
+    padding: 10px 0;
+    line-height: 24px;
+    border-bottom: 2px dashed #67b509;
+}
+.personalInformation td{
+    width: 310px;
+}
+#selfEvaluation{
+    width: 620px;
+    padding: 10px 0;
+    margin-left: 200px;
+    line-height: 24px;
+}
+#selfEvaluation:hover{
+    background : #d6f8b4;
+    font-size: 20px;
+}
+.bottom{
+    width: 620px;
+    height: 100px;
+    padding: 10px 0;
+    margin-left: 200px;
+}
