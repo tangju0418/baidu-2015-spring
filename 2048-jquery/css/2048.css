@@ -1,6 +1,5 @@
 #game2048{
     width: 450px;
-    height: 550px;
     border: 2px solid  #dddddd;
     border-radius:15px;
     margin: 20px auto 0 auto;
@@ -89,7 +88,7 @@
 
 #game{
     width: 450px;
-    height: 450px;
+    /*height: 450px;*/
     margin: 0 auto;
     position: absolute;
     z-index: 1;

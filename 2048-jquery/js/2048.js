@@ -10,6 +10,35 @@
     var box_width = 100;
     var box_height = 100;
     var box_space = 10;
+    if(document.body.clientWidth<475) {
+        box_width = parseInt(window.screen.width/4.75);
+        box_height = box_width;
+        box_space = parseInt(box_width*0.15);
+        $("#information").css({
+            "width":window.screen.width-2*box_space
+        });
+        $("#title").css({
+            "width":window.screen.width-2*box_space,
+            "font-size": box_width*0.8
+        });
+        $("#game2048").css({
+            "width":window.screen.width
+        });
+        $("#main").css({
+            "width":window.screen.width,
+            "height":window.screen.width
+        });
+        $("#gameScore").css({
+            "width":window.screen.width*0.4,
+            "font-size": box_space*2.0,
+            "margin-left":-(window.screen.width*0.4+box_space)
+        });
+        $(".v2,.v4,.v8").css("font-size",box_width*0.18);
+        $(".v16,.v32,.v64").css("font-size",box_width*0.15);
+        $(".v128,.v256,.v512").css("font-size",box_width*0.11);
+        $(".v1024,.v2048,.v4096").css("font-size",box_width*0.08);
+    }
+
 
     $(document).ready(initGridItems);
     $(document).ready(initGame);
@@ -312,10 +341,7 @@
             gameJudgment(moveDown);
         }
     }
-
-    document.onkeydown=function(e) {
-        e = window.event || e;
-
+    $(document).ready(function() {
         var func_mapper = [
             {
                 key_code: 37,
@@ -334,14 +360,54 @@
                 func: process_down_key_down
             }
         ];
+        var startx = 0;
+        var starty = 0;
+        var endx = 0;
+        var endy = 0;
 
-        for (var i = 0; i < func_mapper.length; i++) {
-            if (func_mapper[i].key_code === e.keyCode) {
-                func_mapper[i].func();
-                break;
+        document.onkeydown = function (e) {
+            e = window.event || e;
+
+            for (var i = 0; i < func_mapper.length; i++) {
+                if (func_mapper[i].key_code === e.keyCode) {
+                    func_mapper[i].func();
+                    break;
+                }
             }
-        }
-    };
+        };
+        document.addEventListener('touchstart',function(e){
+            e.preventDefault();
+            startx = e.touches[0].pageX;
+            starty = e.touches[0].pageY;
+        });
+        document.addEventListener('touchend',function(e){
+            e.preventDefault();
+            endx = e.changedTouches[0].pageX;
+            endy = e.changedTouches[0].pageY;
+
+            var deltax=endx-startx;
+            var deltay=endy-starty;
+            if(Math.abs(deltax)<(0.1*box_width) && Math.abs(deltay)<(0.1*box_width)){
+                if($(e.target).hasClass("btn")) {
+                    $(e.target).trigger("click");
+                }
+                return ;
+            }
+            if(Math.abs(deltax)>Math.abs(deltay)){
+                if(deltax>0){ // right
+                    func_mapper[2].func();
+                }else{  // left
+                    func_mapper[0].func();
+                }
+            }else{
+                if(deltay>0){  // bottom
+                    func_mapper[3].func();
+                }else{   // top
+                    func_mapper[1].func();
+                }
+            }
+        });
+    });
 
     function gameOver() {
         $("#end").show();
