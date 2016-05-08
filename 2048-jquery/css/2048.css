@@ -77,13 +77,13 @@
     color: rgb(250, 3, 15);
 }
 #again{
+    position: relative;
     width: 120px;
     height: 60px;
     font-size: 25px;
     color: #0b0b0b;
-}
-#again{
-    margin-left: 175px;
+    margin-left: 50%;
+    left: -60px;
 }
 
 #game{
@@ -139,9 +139,9 @@
     background-color: #bc7afa;
 }
 .v1024{
-    font-size:40px;
-    background-color: #fab4a8;
-}
+     font-size:40px;
+     background-color: #fab4a8;
+ }
 .v2048{
     font-size:40px;
     background-color: #fa6b80;

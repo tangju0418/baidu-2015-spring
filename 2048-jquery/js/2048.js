@@ -10,6 +10,17 @@
     var box_width = 100;
     var box_height = 100;
     var box_space = 10;
+
+    var $gameAgain = $("#again");
+    $gameAgain.click(function(e){
+        e.preventDefault();
+        newGame();
+    });
+    $gameAgain.on('touchend',function(e){
+        e.preventDefault();
+        newGame();
+    });
+
     if(document.body.clientWidth<475) {
         box_width = parseInt(window.screen.width/4.75);
         box_height = box_width;
@@ -24,7 +35,7 @@
         $("#game2048").css({
             "width":window.screen.width
         });
-        $("#main").css({
+        $("#main,#end").css({
             "width":window.screen.width,
             "height":window.screen.width
         });
@@ -33,10 +44,28 @@
             "font-size": box_space*2.0,
             "margin-left":-(window.screen.width*0.4+box_space)
         });
-        $(".v2,.v4,.v8").css("font-size",box_width*0.18);
-        $(".v16,.v32,.v64").css("font-size",box_width*0.15);
-        $(".v128,.v256,.v512").css("font-size",box_width*0.11);
-        $(".v1024,.v2048,.v4096").css("font-size",box_width*0.08);
+        $("#end p").css({
+            "font-size": box_width*0.7,
+            "width":window.screen.width
+
+        });
+        $("#again").css({
+            "width": window.screen.width*0.3,
+            "height": window.screen.width*0.15,
+            "left":-(window.screen.width*0.15),
+            "font-size": box_width*0.3
+        });
+
+        var s = document.styleSheets[0];
+        for(var i = 10;i<16;i++){
+            s.rules[i].style["font-size"] = box_width*0.80;
+        }
+        for(var j = 16;j< 19;j++){
+            s.rules[j].style["font-size"] = box_width*0.55;
+        }
+        for(var m = 19;m< s.rules.length;m++){
+            s.rules[m].style["font-size"] = box_width*0.40;
+        }
     }
 
 
@@ -411,17 +440,17 @@
 
     function gameOver() {
         $("#end").show();
-        var $gameAgain = $("#again");
 
-        $gameAgain.bind('click',function(){
-            for (var i = 0; i < row; i++) {
-                for (var j = 0; j < col; j++) {
-                    fillDivs[i][j].remove();
-                    fillDivs[i][j] = invalidValue;
-                }
+    }
+    function newGame(){
+        var tmp = fillDivs;
+        for (var i = 0; i < row; i++) {
+            for (var j = 0; j < col; j++) {
+                fillDivs[i][j].remove();
+                fillDivs[i][j] = invalidValue;
             }
-            initGame();
-        });
+        }
+        initGame();
     }
 
 })();
